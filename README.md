@@ -5,23 +5,23 @@ programs** used in the RSAA HPC Skillshare tutorial.
 
 You can find Mark Krumholz's Introductory slides [here](https://github.com/svenbuder/rsaa_skillshare/blob/main/2026-03-supercomputing/rsaa-skillshare-supercomputing-slides.pdf)
 
-------------------------------------------------------------------------
+## 1 SSH onto mozzie and clone the repository
 
-# SSH onto our RSAA HPC cluster mozzie (historically called avatar)
+SSH onto our RSAA HPC cluster mozzie (historically called avatar)
 
 ``` bash
 ssh -Y MSO_USERNAME@mozzie.anu.edu.au
 ```
 
-
-# Clone the repository
+Clone the repository and list its content
 
 ``` bash
 git clone https://github.com/svenbuder/rsaa_hpc_tutorial.git
 cd rsaa_hpc_tutorial
+ls
 ```
 
-Repository structure:
+You should see the following repository structure:
 
     rsaa_hpc
     ├── code/       Python scripts executed by the jobs
@@ -29,9 +29,7 @@ Repository structure:
     ├── output/     Output created by the jobs
     └── *.pbs       PBS job submission scripts
 
-------------------------------------------------------------------------
-
-# Submitting jobs
+## 3 Submitting jobs
 
 Example:
 
@@ -51,9 +49,7 @@ Cancel a job:
 qdel JOBID
 ```
 
-------------------------------------------------------------------------
-
-# Example 1 -- Single CPU job
+### 3.1 Example 1 -- Single CPU job
 
     qsub pbs_single_cpu.pbs
 
@@ -65,17 +61,14 @@ Logs appear in:
 
     logs/
 
-------------------------------------------------------------------------
-
-# Example 2 -- Multi‑CPU job
+### 3.2 Example 2 -- Multi‑CPU job
 
     qsub pbs_threaded_4cpu.pbs
 
 Requests **4 CPUs** and runs a multiprocessing Python script.
 
-------------------------------------------------------------------------
 
-# Example 3 -- Job array
+### 3.3 Example 3 -- Job array
 
     qsub pbs_job_array.pbs
 
@@ -85,9 +78,7 @@ Each job writes results to:
 
     output/
 
-------------------------------------------------------------------------
-
-# Example 4 -- Jupyter notebook on a compute node
+### 3.4 Example 4 -- Jupyter notebook on a compute node
 
     qsub pbs_jupyter_notebook.pbs
 
@@ -101,9 +92,8 @@ Open:
 
     http://localhost:8888
 
-------------------------------------------------------------------------
 
-# Important PBS variable
+## Important PBS variable
 
 All scripts contain:
 
