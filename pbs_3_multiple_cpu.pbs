@@ -1,0 +1,22 @@
+#!/bin/bash
+#PBS -N 3_multiple_cpus
+#PBS -l select=1:ncpus=4
+#PBS -q small
+#PBS -o logs/
+#PBS -e logs/
+#PBS -m ae
+
+cd "$PBS_O_WORKDIR"
+
+echo "Running on:"
+hostname
+echo "Working directory:"
+pwd
+echo "Job ID:"
+echo "$PBS_JOBID"
+echo "Allocated CPUs:"
+echo "$PBS_NCPUS"
+
+python code/sine_multiprocessing.py "$PBS_NCPUS"
+
+echo "Job finished successfully."

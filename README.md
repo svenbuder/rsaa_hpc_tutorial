@@ -123,18 +123,12 @@ The PBS script is mostly the same as before, but now:
 
 ![Sine function example](output/sine_function.png)
 
-## 2.3 Example 3 -- Threaded job with 4 CPUs
+## 2.3 Example 3 -- Threaded job with multiple CPUs
 
 Submit the job:
 
 ```bash
-qsub pbs_3_threaded_4cpu.pbs
-```
-
-Runs:
-
-```text
-code/threaded_sine_scan.py
+qsub pbs_3_multipe_cpus.pbs
 ```
 
 This example requests **4 CPUs** and uses Python multiprocessing to split a simple numerical task across several worker processes.
@@ -149,50 +143,56 @@ This example requests **4 CPUs** and uses Python multiprocessing to split a simp
 ### PBS script
 
 ```bash
-#!/bin/bash
-#PBS -N 3_threaded_4cpu
+...
 #PBS -l select=1:ncpus=4
-#PBS -q small
-# Options for -q on mozzie include: small, large
-#PBS -o logs/
-#PBS -e logs/
-#PBS -m ae
-# Optional: adjust email on (on new line): #PBS -M your.email@example.com
 
-cd "$PBS_O_WORKDIR"
-
-echo "Running on:"
-hostname
-echo "Working directory:"
-pwd
-echo "Job ID:"
-echo "$PBS_JOBID"
 echo "Allocated CPUs:"
 echo "$PBS_NCPUS"
 
-python code/threaded_sine_scan.py "$PBS_NCPUS"
-
-echo "Job finished successfully."
+python code/sine_multiprocessing.py "$PBS_NCPUS"
+...
 ```
 
 ### What the Python code does
 
-The script evaluates several sine-function parameter combinations and computes a simple numerical summary for each case.
+This creates a list of independent tasks, distributes them across the requested CPUs and gathers the results.
 
-It:
+```python
+import sys
+from multiprocessing import Pool
 
-1. creates a list of independent tasks
-2. distributes them across the requested CPUs
-3. gathers the results
-4. writes them to
+# Nr of CPUs handed down from PBS script
+ncpu = int(sys.argv[1])
 
-```text
-output/threaded_sine_scan_results.txt
+def evaluate_task(task):
+    """
+    Function to evaluate a specific task
+    """
+
+# A number of tasks, e.g. 10 parameter values
+tasks = np.arange(10)
+
+# Pool 10 tasks across ncpu
+with Pool(processes=ncpu) as pool:
+    results = pool.map(evaluate_task, tasks)
 ```
 
-This example is useful to show that requesting multiple CPUs only helps if the code is actually written to use them.
+Note: Some `python` packages are already written to parallelise, but requesting multiple CPUs only helps if the code is actually written to use them.
 
----
+### For more complex parallel workloads
+
+The threaded example above uses Python’s `multiprocessing` module to run several worker processes on a single node. This is often the simplest way to parallelise Python code.
+
+However, HPC systems support several different parallel computing patterns depending on the type of problem and also your choice of programming language.
+
+| Situation | Typical approach | Example tools |
+|-----------|------------------|---------------|
+| One task split across several CPUs on **one node** | Shared-memory parallelism | Python `multiprocessing`, OpenMP |
+| One task distributed across **many nodes** | Message Passing Interface (MPI) | e.g. OpenMPI, `mpi4py` |
+| Many **independent tasks** | Job arrays (scheduler parallelism) | PBS job arrays (`#PBS -J`) |
+| Large Python data workflows | Task-based parallel frameworks | `dask`, `joblib` |
+
+In practice, job arrays and simple multiprocessing cover many everyday HPC workloads. More complex simulations often rely on MPI-based codes written in C, C++, Fortran, or Python (`mpi4py`). **Discuss options with your supervisor or colleagues at the institute**, who may already have experience or existing tools for similar problems.
 
 ## 2.4 Example 4 -- Job array
 
