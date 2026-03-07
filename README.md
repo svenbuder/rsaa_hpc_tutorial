@@ -246,7 +246,7 @@ This starts a Jupyter notebook server on a compute node and will print output co
 Leave this terminal running and open a new terminal on your local machine and run, where you exchange `m16` with the node your job runs on and `12345` with the port you have chosen:
 
 ```bash
-ssh -L 8888:m16:12345 buder@mozzie.anu.edu.au
+ssh -L 8888:m16:12345 USERNAME@mozzie.anu.edu.au
 ```
 
 Then open:
