@@ -2,15 +2,10 @@
 #PBS -N 4_job_array
 #PBS -l select=1:ncpus=1
 #PBS -q small
-# Options for -q on mozzie include: small, large
 #PBS -J 1-5
 #PBS -o logs/
 #PBS -e logs/
 #PBS -m ae
-# Optional: adjust email on (on new line): #PBS -M your.email@example.com
-
-# If you want your script to stop if any command fails, uncomment:
-# set -e
 
 cd "$PBS_O_WORKDIR"
 
