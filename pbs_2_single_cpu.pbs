@@ -1,6 +1,7 @@
 #!/bin/bash
 #PBS -N 2_single_cpu
 #PBS -l select=1:ncpus=1
+# Each node on mozzie has 28 CPUs
 #PBS -q small
 # Options for -q on mozzie include: small, large
 #PBS -o logs/
