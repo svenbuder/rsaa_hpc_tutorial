@@ -225,59 +225,28 @@ Job arrays are ideal when you want to run many similar jobs, for example:
 
 ## 2.5 Example 5 -- Interactive Jupyter notebook
 
-Submit the job:
+Submit an interactive job within a screen (a virtual screen that will stay open even if you loose internet access):
 
 ```bash
-qsub pbs_5_jupyter_notebook.pbs
+screen -S jupyter_session
+qsub -I -q small -l select=1:ncpus=1 -N jupyter
 ```
 
-This starts a **Jupyter notebook server on a compute node**.
-
-### Why do this?
-
-Interactive work should not run on the login node.  
-Instead, you request resources via PBS and run Jupyter on the allocated compute node.
-
-### PBS script
+This will submit your interactive job to one of the compute nodes, e.g. `m16`. In the same bash, now start `jupyter` with a (hopefully) unique port (so not `12345` as in this example)::
 
 ```bash
-#!/bin/bash
-#PBS -N 5_jupyter_notebook
-#PBS -l select=1:ncpus=2
-#PBS -q small
-# Options for -q on mozzie include: small, large
-#PBS -o logs/
-#PBS -e logs/
-#PBS -m ae
-# Optional: adjust email on (on new line): #PBS -M your.email@example.com
-
-cd "$PBS_O_WORKDIR"
-
-PORT=8888
-
-echo "Running on:"
-hostname
-echo "Working directory:"
-pwd
-echo "Job ID:"
-echo "$PBS_JOBID"
-echo
-echo "To connect from your laptop, run:"
-echo "ssh -L ${PORT}:localhost:${PORT} USERNAME@HEADNODE"
-echo
-echo "Then open:"
-echo "http://localhost:${PORT}"
-echo
-
-jupyter notebook --no-browser --port="${PORT}" --ip=0.0.0.0
+cd rsaa_hpc_tutorial/
+jupyter notebook --no-browser --ip=0.0.0.0 --port=12345
 ```
 
-### How to connect
+This starts a Jupyter notebook server on a compute node and will print output containing a token, for example:
 
-Once the job starts, create an SSH tunnel from your local computer:
+`[some green text] http://localhost:12345/tree?token=...`
+
+Leave this terminal running and open a new terminal on your local machine and run, where you exchange `m16` with the node your job runs on and `12345` with the port you have chosen:
 
 ```bash
-ssh -L 8888:localhost:8888 USERNAME@HEADNODE
+ssh -L 8888:m16:12345 buder@mozzie.anu.edu.au
 ```
 
 Then open:
@@ -286,12 +255,9 @@ Then open:
 http://localhost:8888
 ```
 
-in your browser.
+in your browser. This usually will ask you for a `token`. Simply copy and paste the characters after `http://localhost:12345/tree?token=` of the `screen` terminal.
 
-Depending on the cluster configuration, you may need to adapt the SSH command.  
 The main lesson is that the notebook runs on the compute node, not on the login node.
-
----
 
 ## 2.6 Example 6 -- Small scaling test
 
