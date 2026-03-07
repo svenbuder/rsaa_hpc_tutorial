@@ -75,9 +75,54 @@ The following logs appear in `logs/`:
 
 While this job runs, I would not use it. There some things one should fix or add to a job submission file.
 
-### 3.2 Example 2 -- Single‑CPU job
+### 3.2 Example 2 --- Single CPU job with output
+
+Submit the job:
 
     qsub pbs_2_single_cpu.pbs
+
+This example runs a slightly more realistic batch job.\
+In addition to writing log messages, it produces scientific output
+files when executing `code/sine_function.py`.
+
+#### PBS script
+
+``` bash
+#!/bin/bash
+#PBS -N 2_single_cpu
+#PBS -l select=1:ncpus=1
+# Each node has 28 CPUs
+#PBS -q small
+# Options for -q on mozzie include: small, large
+#PBS -o logs/
+#PBS -e logs/
+#PBS -m ae
+
+cd "$PBS_O_WORKDIR"
+
+echo "Running on:"
+hostname
+echo "Working directory:"
+pwd
+echo "Job ID:"
+echo "$PBS_JOBID"
+
+python code/sine_function.py
+
+echo "Job finished successfully."
+```
+
+#### Changes compared to Example 1
+
+The PBS script is mostly the same as before, but now:
+
+-   We submit the job to one of the more numerous `small` memory nodes
+-   Email notifications are enabled (`#PBS -m ae`)
+-   The job runs a Python script that produces a `pdf` and `png` file showing a sine-function as well as a `txt` file that has the `amplitude`, `frequency`, `phase`, and `offset` of the function.
+-   These output files are saved in the `output/` directory to keep projects organised and makes it easier to find results from many jobs.
+
+![Sine function example](output/sine_function.png)
+
 
 ### 3.3 Example 3 -- Multi‑CPU job
 
