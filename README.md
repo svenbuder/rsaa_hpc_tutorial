@@ -154,12 +154,3 @@ ssh -L 8888:localhost:8888 USERNAME@mozzie.anu.edu.au
 Open:
 
     http://localhost:8888
-
-
-## Important PBS variable
-
-All scripts contain:
-
-    cd $PBS_O_WORKDIR
-
-This ensures the job runs from the submission directory.
