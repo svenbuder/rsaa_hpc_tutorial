@@ -1,0 +1,4 @@
+1.0  # amplitude
+1.0  # frequency
+0.0  # phase
+0.0  # offset
