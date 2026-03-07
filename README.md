@@ -149,6 +149,7 @@ This example requests **4 CPUs** and uses Python multiprocessing to split a simp
 SNCPUS=$(wc -l < "$PBS_NODEFILE")
 echo "Allocated CPUs:"
 echo "$NCPUS"
+# On some HPCs, you could also use $PBS_NCPUS
 
 python code/sine_multiprocessing.py "$NCPUS"
 ...
@@ -197,20 +198,22 @@ In practice, job arrays and simple multiprocessing cover many everyday HPC workl
 
 ## 2.4 Example 4 -- Job array
 
-Submit the job:
+This example demonstrates how many related jobs can be submitted with one `qsub` command:
 
 ```bash
 qsub pbs_4_job_array.pbs
 ```
 
-Runs:
-
-```text
-code/array_sine_function.py
-```
-
 This example launches a **job array**.  
 Each array task gets a different value of `PBS_ARRAY_INDEX` and creates a slightly different sine function.
+
+```bash
+...
+#PBS -l select=1:ncpus=1
+#PBS -J 1-5
+# This will launch an array of 5 jobs each with 1 CPU.
+...
+```
 
 ### Why job arrays are useful
 
@@ -219,58 +222,6 @@ Job arrays are ideal when you want to run many similar jobs, for example:
 - scanning different parameters
 - processing many input files
 - repeating simulations with different seeds
-
-### PBS script
-
-```bash
-#!/bin/bash
-#PBS -N 4_job_array
-#PBS -l select=1:ncpus=1
-#PBS -q small
-# Options for -q on mozzie include: small, large
-#PBS -J 1-5
-#PBS -o logs/
-#PBS -e logs/
-#PBS -m ae
-# Optional: adjust email on (on new line): #PBS -M your.email@example.com
-
-cd "$PBS_O_WORKDIR"
-
-echo "Running on:"
-hostname
-echo "Working directory:"
-pwd
-echo "Job ID:"
-echo "$PBS_JOBID"
-echo "Array index:"
-echo "$PBS_ARRAY_INDEX"
-
-python code/array_sine_function.py "$PBS_ARRAY_INDEX"
-
-echo "Job finished successfully."
-```
-
-### What the Python code does
-
-For each array index, the script:
-
-1. chooses a different sine-function frequency
-2. creates a plot
-3. saves the figure and parameters with filenames containing the array index
-
-Example output files:
-
-```text
-output/array_sine_1.png
-output/array_sine_1.txt
-output/array_sine_2.png
-output/array_sine_2.txt
-...
-```
-
-This demonstrates how many related jobs can be submitted with one `qsub` command.
-
----
 
 ## 2.5 Example 5 -- Interactive Jupyter notebook
 
