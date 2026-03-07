@@ -1,0 +1,14 @@
+#!/bin/bash
+#PBS -N 0_minimal
+#PBS -l select=1:ncpus=1
+#PBS -o logs/
+#PBS -e logs/
+
+cd $PBS_O_WORKDIR
+
+echo "Running on:"
+hostname
+echo "in directory:"
+$PBS_O_WORKDIR
+
+python code/hello_world.py
