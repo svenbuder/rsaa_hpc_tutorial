@@ -146,10 +146,11 @@ This example requests **4 CPUs** and uses Python multiprocessing to split a simp
 ...
 #PBS -l select=1:ncpus=4
 
+SNCPUS=$(wc -l < "$PBS_NODEFILE")
 echo "Allocated CPUs:"
-echo "$PBS_NCPUS"
+echo "$NCPUS"
 
-python code/sine_multiprocessing.py "$PBS_NCPUS"
+python code/sine_multiprocessing.py "$NCPUS"
 ...
 ```
 
