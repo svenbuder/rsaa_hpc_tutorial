@@ -232,7 +232,7 @@ screen -S jupyter_session
 qsub -I -q small -l select=1:ncpus=1 -N jupyter
 ```
 
-This will submit your interactive job to one of the compute nodes, e.g. `m16`. In the same bash, now start `jupyter` with a (hopefully) unique port (so not `12345` as in this example)::
+This will submit your interactive job to one of the compute nodes, e.g. `m16`. Note that you might need more than `ncpus=1`. In the same bash, now start `jupyter` with a (hopefully) unique port (so not `12345` as in this example)::
 
 ```bash
 cd rsaa_hpc_tutorial/
