@@ -6,6 +6,8 @@
 #PBS -e logs/
 #PBS -m ae
 
+set -e
+
 cd "$PBS_O_WORKDIR"
 
 echo "Running on:"
@@ -14,9 +16,11 @@ echo "Working directory:"
 pwd
 echo "Job ID:"
 echo "$PBS_JOBID"
-echo "Allocated CPUs:"
-echo "$PBS_NCPUS"
 
-python code/sine_multiprocessing.py "$PBS_NCPUS"
+SNCPUS=$(wc -l < "$PBS_NODEFILE")
+echo "Allocated CPUs:"
+echo "$NCPUS"
+
+python code/sine_multiprocessing.py "$NCPUS"
 
 echo "Job finished successfully."

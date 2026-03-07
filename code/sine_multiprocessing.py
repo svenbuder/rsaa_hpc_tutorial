@@ -25,7 +25,7 @@ if __name__ == "__main__":
     with Pool(processes=ncpu) as pool:
         results = pool.map(evaluate_task, tasks)
 
-    with open("output/threaded_sine_scan_results.txt", "w") as f:
+    with open("output/sine_evaluations_multiprocessing.txt", "w") as f:
         f.write("# task_id amplitude frequency phase integral_abs_y\n")
         for row in results:
             f.write(
