@@ -248,18 +248,20 @@ Leave this terminal running. To detach from the `screen` session without stoppin
 Open a new terminal on your local machine and run, where you exchange `m16` with the node your job runs on and `12345` with the port you have chosen:
 
 ```bash
-ssh -L 8888:m16:12345 USERNAME@mozzie.anu.edu.au
+ssh -L 12345:m16:12345 USERNAME@mozzie.anu.edu.au
 ```
 
 Then open:
 
 ```text
-http://localhost:8888
+http://localhost:12345
 ```
 
 in your browser. This usually will ask you for a `token`. Simply copy and paste the characters after `http://localhost:12345/tree?token=` of the `screen` terminal.
 
 The main lesson is that the notebook runs on the compute node, not on the login node.
+
+Note that the way you have to start `jupyter` on HPCs may differ (for some HPCs, you can for example use `ssh -L 12345:localhost:12345` instead of the compute node name).
 
 ## 2.6 Example 6 -- Small scaling test
 
