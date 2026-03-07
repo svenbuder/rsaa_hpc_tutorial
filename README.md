@@ -229,7 +229,7 @@ Submit an interactive job within a screen (a virtual screen that will stay open 
 
 ```bash
 screen -S jupyter_session
-qsub -I -q small -l select=1:ncpus=1 -N jupyter
+qsub -I -q small -l select=1:ncpus=2 -N jupyter
 ```
 
 This will submit your interactive job to one of the compute nodes, e.g. `m16`. Note that you might need more than `ncpus=1`. In the same bash, now start `jupyter` with a (hopefully) unique port (so not `12345` as in this example)::
@@ -243,7 +243,9 @@ This starts a Jupyter notebook server on a compute node and will print output co
 
 `[some green text] http://localhost:12345/tree?token=...`
 
-Leave this terminal running and open a new terminal on your local machine and run, where you exchange `m16` with the node your job runs on and `12345` with the port you have chosen:
+Leave this terminal running. To detach from the `screen` session without stopping Jupyter, press `Ctrl+A` followed by `D`. To reconnect later, run `screen -r jupyter_session`.
+
+Open a new terminal on your local machine and run, where you exchange `m16` with the node your job runs on and `12345` with the port you have chosen:
 
 ```bash
 ssh -L 8888:m16:12345 USERNAME@mozzie.anu.edu.au
