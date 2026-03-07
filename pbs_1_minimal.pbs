@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -N 0_minimal
+#PBS -N 1_minimal
 #PBS -l select=1:ncpus=1
 #PBS -o logs/
 #PBS -e logs/
