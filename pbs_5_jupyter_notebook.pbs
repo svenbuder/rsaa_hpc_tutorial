@@ -1,0 +1,31 @@
+#!/bin/bash
+#PBS -N 5_jupyter_notebook
+#PBS -l select=1:ncpus=2
+#PBS -q small
+# Options for -q on mozzie include: small, large
+#PBS -o logs/
+#PBS -e logs/
+#PBS -m ae
+# Optional: adjust email on (on new line): #PBS -M your.email@example.com
+
+cd "$PBS_O_WORKDIR"
+
+PORT=8888
+
+echo "Running on:"
+hostname
+echo "Working directory:"
+pwd
+echo "Job ID:"
+echo "$PBS_JOBID"
+echo
+echo "To connect from your laptop, run:"
+echo "ssh -L ${PORT}:localhost:${PORT} USERNAME@HEADNODE"
+echo
+echo "Then open:"
+echo "http://localhost:${PORT}"
+echo
+echo "After connecting, use the token shown below in the Jupyter output."
+echo
+
+jupyter notebook --no-browser --port="${PORT}" --ip=0.0.0.0

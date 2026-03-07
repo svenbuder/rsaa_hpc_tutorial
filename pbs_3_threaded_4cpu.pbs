@@ -1,0 +1,30 @@
+#!/bin/bash
+#PBS -N 3_threaded_4cpu
+#PBS -l select=1:ncpus=4
+#PBS -q small
+# Options for -q on mozzie include: small, large
+#PBS -o logs/
+#PBS -e logs/
+#PBS -m ae
+# Optional: adjust email on (on new line): #PBS -M your.email@example.com
+
+# To request the whole node exclusively, one could use (in a new line): #PBS -l place=scatter:excl
+# This is discouraged as a default unless you have tested that exclusive access is necessary.
+
+# If you want your script to stop if any command fails, uncomment:
+# set -e
+
+cd "$PBS_O_WORKDIR"
+
+echo "Running on:"
+hostname
+echo "Working directory:"
+pwd
+echo "Job ID:"
+echo "$PBS_JOBID"
+echo "Allocated CPUs:"
+echo "$PBS_NCPUS"
+
+python code/threaded_sine_scan.py "$PBS_NCPUS"
+
+echo "Job finished successfully."
