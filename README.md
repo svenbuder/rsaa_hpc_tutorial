@@ -29,7 +29,7 @@ You should see the following repository structure:
     ├── output/     Output created by the jobs
     └── *.pbs       PBS job submission scripts
 
-## 3 Submitting jobs
+## 2 Submitting jobs
 
 Example:
 
@@ -49,7 +49,7 @@ Cancel a job:
 qdel JOBID
 ```
 
-### 3.1 Example 1 -- A job that works (but should not be used)
+### 2.1 Example 1 -- A job that works (but should not be used)
 
     qsub pbs_0_minimal.pbs
 
@@ -75,7 +75,7 @@ The following logs appear in `logs/`:
 
 While this job runs, I would not use it. There some things one should fix or add to a job submission file.
 
-### 3.2 Example 2 --- Single CPU job with output
+### 2.2 Example 2 --- Single CPU job with output
 
 Submit the job:
 
@@ -124,14 +124,14 @@ The PBS script is mostly the same as before, but now:
 ![Sine function example](output/sine_function.png)
 
 
-### 3.3 Example 3 -- Multi‑CPU job
+### 2.3 Example 3 -- Multi‑CPU job
 
     qsub pbs_3_threaded_4cpu.pbs
 
 Requests **4 CPUs** and runs a multiprocessing Python script.
 
 
-### 3.4 Example 4 -- Job array
+### 2.4 Example 4 -- Job array
 
     qsub pbs_4_job_array.pbs
 
@@ -141,7 +141,7 @@ Each job writes results to:
 
     output/
 
-### 3.5 Example 5 -- Jupyter notebook on a compute node
+### 2.5 Example 5 -- Jupyter notebook on a compute node
 
     qsub pbs_5_jupyter_notebook.pbs
 
