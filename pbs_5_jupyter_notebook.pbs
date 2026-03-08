@@ -2,11 +2,9 @@
 #PBS -N 5_jupyter_notebook
 #PBS -l select=1:ncpus=2
 #PBS -q small
-# Options for -q on mozzie include: small, large
 #PBS -o logs/
 #PBS -e logs/
 #PBS -m ae
-# Optional: adjust email on (on new line): #PBS -M your.email@example.com
 
 cd "$PBS_O_WORKDIR"
 
@@ -28,4 +26,4 @@ echo
 echo "After connecting, use the token shown below in the Jupyter output."
 echo
 
-jupyter notebook --no-browser --port="${PORT}" --ip=0.0.0.0
+jupyter notebook --no-browser --port="${PORT}"

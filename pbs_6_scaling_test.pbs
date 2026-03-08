@@ -2,14 +2,9 @@
 #PBS -N 6_scaling_test
 #PBS -l select=1:ncpus=8
 #PBS -q small
-# Options for -q on mozzie include: small, large
 #PBS -o logs/
 #PBS -e logs/
 #PBS -m ae
-# Optional: adjust email on (on new line): #PBS -M your.email@example.com
-
-# If you want your script to stop if any command fails, uncomment:
-# set -e
 
 cd "$PBS_O_WORKDIR"
 
@@ -19,8 +14,10 @@ echo "Working directory:"
 pwd
 echo "Job ID:"
 echo "$PBS_JOBID"
+
+SNCPUS=$(wc -l < "$PBS_NODEFILE")
 echo "Allocated CPUs:"
-echo "$PBS_NCPUS"
+echo "$NCPUS"
 
 python code/scaling_test.py
 
