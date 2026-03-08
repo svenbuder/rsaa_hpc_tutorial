@@ -251,13 +251,13 @@ Open a new terminal on your local machine and run, where you exchange `m16` with
 ssh -L 12345:m16:12345 USERNAME@mozzie.anu.edu.au
 ```
 
-Then open:
+Then in your browser open:
 
 ```text
 http://localhost:12345
 ```
 
-in your browser. This usually will ask you for a `token`. Simply copy and paste the characters after `http://localhost:12345/tree?token=` of the `screen` terminal.
+This usually will ask you for a `token`. Simply copy and paste the characters after `http://localhost:12345/tree?token=` of the `screen` terminal.
 
 The main lesson is that the notebook runs on the compute node, not on the login node.
 
@@ -271,82 +271,29 @@ Submit the job:
 qsub pbs_6_scaling_test.pbs
 ```
 
-Runs:
+This job requests 8 CPUs and then measures how the runtime changes when using 1, 2, 4, and 8 processes.
 
-```text
-code/scaling_test.py
+The code estimates the value of π using a simple Monte Carlo experiment. It samples 8,000,000 random points in the unit square and checks which points fall inside a quarter circle of radius 1:
+```
+x * x + y * y <= 1.0
 ```
 
-This example measures how the runtime of a parallel task changes when using:
+The fraction of points inside the quarter circle gives an estimate of π:
 
-```text
-1, 2, 4, and 8 CPUs
+```
+π ≈ 4 × (points inside circle) / (total points)
 ```
 
-### Why this is useful
+The total number of samples is kept fixed, but the work is split across different numbers of worker processes. This allows us to measure how efficiently the program uses additional CPUs.
 
-A common mistake on HPC systems is to request more CPUs than a program can use efficiently.
+In a perfect world, doubling the number of CPUs would halve the runtime. In practice, process startup, scheduling, and communication overheads mean that scaling is usually less than ideal. In this example, the speed-up is close to ideal for 2 CPUs but begins to flatten for 4 and 8 CPUs. This is a common real-world outcome: using more CPUs helps, but usually not in perfect proportion.
+
+<p align="center"> <img src="output/scaling_runtime.png" alt="Scaling runtime plot" width="50%"> <img src="output/scaling_speedup.png" alt="Scaling speed-up plot" width="48%"> </p>
 
 A scaling test helps answer:
 
-- does the code actually run faster?
-- is the speed-up close to ideal?
-- when do overheads become important?
+- Does the code actually run faster with more CPUs?
+- Is the speed-up close to ideal?
+- At what points do overheads dominate?
 
-### PBS script
-
-```bash
-#!/bin/bash
-#PBS -N 6_scaling_test
-#PBS -l select=1:ncpus=8
-#PBS -q small
-# Options for -q on mozzie include: small, large
-#PBS -o logs/
-#PBS -e logs/
-#PBS -m ae
-# Optional: adjust email on (on new line): #PBS -M your.email@example.com
-
-cd "$PBS_O_WORKDIR"
-
-echo "Running on:"
-hostname
-echo "Working directory:"
-pwd
-echo "Job ID:"
-echo "$PBS_JOBID"
-echo "Allocated CPUs:"
-echo "$PBS_NCPUS"
-
-python code/scaling_test.py
-
-echo "Job finished successfully."
-```
-
-### What the Python code does
-
-The script performs a Monte Carlo estimate of pi and repeats the calculation using 1, 2, 4, and 8 processes.
-
-It then:
-
-1. measures the runtime for each case
-2. computes the speed-up relative to 1 CPU
-3. writes a summary table to
-
-```text
-output/scaling_results.txt
-```
-
-4. saves two figures:
-
-```text
-output/scaling_runtime.png
-output/scaling_speedup.png
-```
-
-### How to interpret the result
-
-- **Runtime plot:** lower is better
-- **Speed-up plot:** compares measured speed-up to ideal speed-up
-
-In a perfect world, doubling the number of CPUs would halve the runtime.  
-In practice, communication and process-management overheads mean scaling is usually less than ideal.
+They are also useful when planning larger computations, for example in supercomputing proposals. In practice, scaling tests are often performed on a reduced but representative version of the problem (e.g. fewer samples, files, or iterations) while keeping the code path otherwise the same.
