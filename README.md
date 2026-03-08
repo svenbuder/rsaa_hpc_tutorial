@@ -43,6 +43,12 @@ Check jobs:
 qstat
 ```
 
+Check details of your specific job:
+
+``` bash
+qstat -f JOBID
+```
+
 Cancel a job:
 
 ``` bash
