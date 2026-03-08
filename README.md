@@ -123,24 +123,24 @@ The PBS script is mostly the same as before, but now:
 
 <p align="center"> <img src="output/sine_function.png" alt="Example output figure" width="60%"></p>
 
-## 2.3 Example 3 -- Threaded job with multiple CPUs
+### 2.3 Example 3 -- Threaded job with multiple CPUs
 
 Submit the job:
 
 ```bash
-qsub pbs_3_multipe_cpus.pbs
+qsub pbs_3_multiple_cpu.pbs
 ```
 
 This example requests **4 CPUs** and uses Python multiprocessing to split a simple numerical task across several worker processes.
 
-### What changes compared to Example 2?
+#### What changes compared to Example 2?
 
 - the job now requests more than one CPU
 - the Python script uses multiple worker processes
 - the output still goes into `output/`
 - this is an example of **shared-memory parallelism on one node**
 
-### PBS script
+#### PBS script
 
 ```bash
 ...
@@ -155,7 +155,7 @@ python code/sine_multiprocessing.py "$NCPUS"
 ...
 ```
 
-### What the Python code does
+#### What the Python code does
 
 This creates a list of independent tasks, distributes them across the requested CPUs and gathers the results.
 
@@ -181,7 +181,7 @@ with Pool(processes=ncpu) as pool:
 
 Note: Some `python` packages are already written to parallelise, but requesting multiple CPUs only helps if the code is actually written to use them.
 
-### For more complex parallel workloads
+#### For more complex parallel workloads
 
 The threaded example above uses Python’s `multiprocessing` module to run several worker processes on a single node. This is often the simplest way to parallelise Python code.
 
@@ -196,7 +196,7 @@ However, HPC systems support several different parallel computing patterns depen
 
 In practice, job arrays and simple multiprocessing cover many everyday HPC workloads. More complex simulations often rely on MPI-based codes written in C, C++, Fortran, or Python (`mpi4py`). **Discuss options with your supervisor or colleagues at the institute**, who may already have experience or existing tools for similar problems.
 
-## 2.4 Example 4 -- Job array
+### 2.4 Example 4 -- Job array
 
 This example demonstrates how many related jobs can be submitted with one `qsub` command:
 
@@ -215,7 +215,7 @@ Each array task gets a different value of `PBS_ARRAY_INDEX` and creates a slight
 ...
 ```
 
-### Why job arrays are useful
+#### Why job arrays are useful
 
 Job arrays are ideal when you want to run many similar jobs, for example:
 
@@ -223,7 +223,7 @@ Job arrays are ideal when you want to run many similar jobs, for example:
 - processing many input files
 - repeating simulations with different seeds
 
-## 2.5 Example 5 -- Interactive Jupyter notebook
+### 2.5 Example 5 -- Interactive Jupyter notebook
 
 Submit an interactive job within a screen (a virtual screen that will stay open even if you loose internet access):
 
@@ -263,7 +263,7 @@ The main lesson is that the notebook runs on the compute node, not on the login 
 
 Note that the way you have to start `jupyter` on HPCs may differ (for some HPCs, you can for example use `ssh -L 12345:localhost:12345` instead of the compute node name).
 
-## 2.6 Example 6 -- Small scaling test
+### 2.6 Example 6 -- Small scaling test
 
 Submit the job:
 
