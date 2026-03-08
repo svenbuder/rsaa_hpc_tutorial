@@ -121,7 +121,7 @@ The PBS script is mostly the same as before, but now:
 -   The job runs a Python script that produces a `pdf` and `png` file showing a sine-function as well as a `txt` file that has the `amplitude`, `frequency`, `phase`, and `offset` of the function.
 -   These output files are saved in the `output/` directory to keep projects organised and makes it easier to find results from many jobs.
 
-![Sine function example](output/sine_function.png)
+<p align="center"> <img src="output/sine_function.png" alt="Example output figure" width="60%"></p>
 
 ## 2.3 Example 3 -- Threaded job with multiple CPUs
 
