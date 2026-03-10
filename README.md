@@ -57,7 +57,7 @@ qdel JOBID
 
 ### 2.1 Example 1 -- A job that works (but should not be used)
 
-    qsub pbs_0_minimal.pbs
+    qsub pbs_1_minimal.pbs
 
 Runs the following `code/hello_world.py`:
 
@@ -160,6 +160,8 @@ echo "$NCPUS"
 python code/sine_multiprocessing.py "$NCPUS"
 ...
 ```
+
+Note: If you have a job that would benefit from being the only one on the node (and you should have good reasons for that), you can also request a node to be allocated to you exclusively with the PBS line `$PBS -l place=scatter:excl`
 
 #### What the Python code does
 
